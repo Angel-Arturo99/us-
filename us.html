@@ -1,0 +1,509 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Nuestros Días</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@400;500;700&family=Young+Serif&display=swap">
+<style>
+/* Layout: columna única íntima. Portada con contador en vivo, carta, galería, cuatro juegos que sellan un pasaporte, y un mensaje final. */
+:root {
+  --bg: #F6EFF7;
+  --bg-soft: #EBDFF0;
+  --surface: #FFFFFF;
+  --fg: #2B1B3A;
+  --muted: #6B5A7E;
+  --line: #DCCBE4;
+  --accent: #D6336C;
+  --accent-2: #7A3FB5;
+  --on-accent: #FFFFFF;
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat", "Segoe Script", "Bradley Hand", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1A1224;
+    --bg-soft: #241833;
+    --surface: #271B36;
+    --fg: #F4EAF8;
+    --muted: #B9A6C8;
+    --line: #3E2E52;
+    --accent: #FF7AA5;
+    --accent-2: #B98AF0;
+    --on-accent: #2A0E1B;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 72px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+.eyebrow { font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+
+/* Portada */
+.hero { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
+.hero h1 { font-size: clamp(2.8rem, 12vw, 5.2rem); }
+.hero h1 span { color: var(--accent); }
+.since { font-family: var(--font-hand); font-size: 1.7rem; color: var(--muted); line-height: 1.2; }
+.counter { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.counter div { border-top: 2px solid var(--accent); padding-top: 8px; min-width: 0; }
+.counter b { display: block; font-family: var(--font-display); font-weight: 400; font-size: clamp(1.9rem, 9vw, 3.1rem); line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.counter span { font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+/* Carta */
+.letter { display: flex; flex-direction: column; gap: 20px; }
+.letter h2, .gallery h2, .games-head h2, .final h2 { font-size: clamp(1.9rem, 7vw, 2.6rem); }
+.letter .body { display: flex; flex-direction: column; gap: 16px; max-width: 62ch; }
+.sign { font-family: var(--font-hand); font-size: 1.9rem; line-height: 1.2; color: var(--accent); }
+
+/* Galería */
+.gallery { display: flex; flex-direction: column; gap: 24px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.photo-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.photo-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: var(--bg-soft); }
+.photo-card p { font-family: var(--font-hand); font-size: 1.45rem; line-height: 1.2; text-align: center; color: var(--accent); margin: 0; }
+
+/* Juegos */
+.games { display: flex; flex-direction: column; gap: 24px; }
+.games-head { display: flex; flex-direction: column; gap: 12px; }
+.games-head p { color: var(--muted); max-width: 56ch; }
+.stamps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; list-style: none; padding: 0; margin: 4px 0 0; }
+.stamps li { border: 1.5px dashed var(--line); border-radius: 10px; padding: 8px 4px; text-align: center; font-size: 0.78rem; font-weight: 700; color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
+.stamps li.on { border-style: solid; border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.stamps li.on::before { content: "✓ "; }
+
+.game { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.game h3 { font-size: 1.45rem; }
+.game .how { color: var(--muted); font-size: 0.95rem; }
+.btn { background: var(--accent); color: var(--on-accent); border: 0; border-radius: 999px; padding: 10px 20px; font-weight: 700; align-self: flex-start; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.found { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.found li { font-family: var(--font-hand); font-size: 1.45rem; line-height: 1.25; border-left: 3px solid var(--accent); padding-left: 12px; animation: fadein 0.4s ease both; }
+.status { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+
+/* Rasca */
+.scratch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.scratch { position: relative; height: 128px; border-radius: 10px; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; overflow: hidden; }
+.scratch p { font-family: var(--font-hand); font-size: 1.3rem; line-height: 1.15; }
+.scratch canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; transition: opacity 0.5s ease; }
+.scratch canvas.gone { opacity: 0; pointer-events: none; }
+
+/* Corazones */
+.arena { position: relative; height: 260px; border-radius: 10px; background: var(--bg-soft); overflow: hidden; }
+.heart { position: absolute; bottom: -60px; padding: 0; border: 0; background: none; color: var(--accent); animation: rise linear forwards; }
+.heart svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+.heart .pop { animation: pop 0.26s ease-out forwards; }
+.heart:nth-child(3n) { color: var(--accent-2); }
+
+/* Memoria */
+.mem-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.card { aspect-ratio: 3 / 4; max-width: 100%; border-radius: 10px; border: 0; background: var(--accent-2); color: var(--on-accent); font-weight: 700; font-size: clamp(0.7rem, 3.4vw, 0.95rem); display: flex; align-items: center; justify-content: center; padding: 2px; transition: transform 0.2s ease, background 0.2s ease; overflow-wrap: anywhere; }
+.card .face { display: none; }
+.card .back { font-family: var(--font-display); font-size: 1.4rem; opacity: 0.8; }
+.card.open, .card.matched { background: var(--bg-soft); color: var(--fg); transform: scale(1.03); }
+.card.open .face, .card.matched .face { display: inline; }
+.card.open .back, .card.matched .back { display: none; }
+.card.matched { background: var(--accent); color: var(--on-accent); }
+
+/* Pregunta */
+.dodge { position: relative; height: 150px; border-radius: 10px; background: var(--bg-soft); overflow: hidden; }
+.dodge .q { position: absolute; inset: 14px 14px auto; text-align: center; font-family: var(--font-display); font-size: 1.3rem; }
+.dodge button { position: absolute; border: 0; border-radius: 999px; padding: 9px 26px; font-weight: 700; }
+.dodge .yes { left: 16%; bottom: 20px; background: var(--accent); color: var(--on-accent); }
+.dodge .no { right: 14%; bottom: 20px; background: var(--surface); border: 1.5px solid var(--line); transition: left 0.18s ease, top 0.18s ease; }
+
+/* Final */
+.final { position: relative; display: flex; flex-direction: column; gap: 16px; border: 2px solid var(--accent); border-radius: 14px; padding: 24px 20px; overflow: hidden; }
+.final .msg { display: flex; flex-direction: column; gap: 14px; max-width: 60ch; }
+.final .msg .big { font-family: var(--font-hand); font-size: 1.7rem; line-height: 1.25; color: var(--accent); }
+.confetti { position: absolute; bottom: -30px; width: 26px; height: 26px; color: var(--accent); pointer-events: none; animation: rise2 2.2s ease-out forwards; }
+.confetti svg { width: 100%; height: 100%; fill: currentColor; }
+.confetti:nth-child(even) { color: var(--accent-2); }
+
+@keyframes rise { from { transform: translateY(0); } to { transform: translateY(-340px); } }
+@keyframes rise2 { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-260px); opacity: 0; } }
+@keyframes pop { to { transform: scale(1.7); opacity: 0; } }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .found li, .card, .dodge .no, .scratch canvas { animation: none; transition: none; }
+}
+</style>
+
+<main class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Hecho solo para ti</p>
+    <h1>Para <span id="nombre">Estrella</span></h1>
+    <p class="since" id="since"></p>
+    <div class="counter" aria-label="Tiempo juntos">
+      <div><b id="cD">0</b><span>días</span></div>
+      <div><b id="cH">0</b><span>horas</span></div>
+      <div><b id="cM">0</b><span>min</span></div>
+      <div><b id="cS">0</b><span>seg</span></div>
+    </div>
+  </header>
+
+  <section class="letter" aria-labelledby="t-carta">
+    <p class="eyebrow">Lo que quiero decirte</p>
+    <h2 id="t-carta">Lo que siento por ti</h2>
+    <div class="body" id="carta"></div>
+    <p class="sign" id="firma"></p>
+  </section>
+
+  <!-- NUEVA SECCIÓN DE GALERÍA -->
+  <section class="gallery" aria-labelledby="t-galeria">
+    <p class="eyebrow">Nuestro Primer Año</p>
+    <h2 id="t-galeria">Galería de Recuerdos</h2>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+  <section class="games" aria-labelledby="t-juegos">
+    <div class="games-head">
+      <p class="eyebrow">Para jugar</p>
+      <h2 id="t-juegos">Cuatro juegos con sorpresa</h2>
+      <p>Cada juego esconde mensajes. Completa los cuatro para abrir el último.</p>
+      <ul class="stamps" aria-label="Juegos completados">
+        <li data-stamp="rasca">Rascar</li>
+        <li data-stamp="corazones">Corazones</li>
+        <li data-stamp="memoria">Memoria</li>
+        <li data-stamp="pregunta">Pregunta</li>
+      </ul>
+    </div>
+
+    <article class="game">
+      <h3>Rasca y descubre</h3>
+      <p class="how">Pasa el dedo o el cursor sobre cada tarjeta hasta que aparezca lo que dice.</p>
+      <div class="scratch-grid" id="scratchGrid"></div>
+    </article>
+
+    <article class="game">
+      <h3>Atrapa los corazones</h3>
+      <p class="how">Toca cada corazón que suba. Cada uno que atrapes trae un mensaje.</p>
+      <div class="arena" id="arena" aria-label="Zona de juego"></div>
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+        <button class="btn" id="heartStart" type="button">Empezar</button>
+        <span class="status" id="heartStatus" aria-live="polite">0 de 6 corazones</span>
+      </div>
+      <ul class="found" id="heartMsgs" aria-live="polite"></ul>
+    </article>
+
+    <article class="game">
+      <h3>Encuentra las parejas</h3>
+      <p class="how">Voltea dos tarjetas. Si son iguales, descubres algo que pienso de eso.</p>
+      <div class="mem-grid" id="memGrid"></div>
+      <ul class="found" id="memMsgs" aria-live="polite"></ul>
+    </article>
+
+    <article class="game">
+      <h3>Una pregunta</h3>
+      <p class="how">Solo tienes que responder.</p>
+      <div class="dodge" id="dodge">
+        <p class="q" id="dq"></p>
+        <button class="yes" id="yes" type="button">Sí</button>
+        <button class="no" id="no" type="button">No</button>
+      </div>
+      <p class="status" id="dodgeStatus" aria-live="polite"></p>
+      <p class="found" id="dodgeMsg" hidden style="font-family:var(--font-hand); font-size:1.5rem; line-height:1.25"></p>
+    </article>
+  </section>
+
+  <section class="final" id="final" aria-labelledby="t-final">
+    <p class="eyebrow">Al terminar los juegos</p>
+    <h2 id="t-final">Mensaje final</h2>
+    <p class="status" id="finalStatus" aria-live="polite"></p>
+    <button class="btn" id="openFinal" type="button" disabled>Abrir mensaje</button>
+    <div class="msg" id="finalMsg" hidden></div>
+  </section>
+</main>
+
+<script>
+/* ============================================================
+   AQUÍ PUEDES AGREGAR TUS FOTOS Y TEXTOS MANUALMENTE
+   ============================================================ */
+const CONFIG = {
+  nombre: "Estrella",                   
+  firma: "Arturo",                  
+  inicio: "2025-11-08T00:00:00",        
+
+  // GALERÍA DE FOTOS: Cambia "URL_DE_TU_FOTO_X" por los links de tus fotos.
+  galeria: [
+    { 
+      url: "URL_DE_TU_FOTO_1", 
+      texto: "El día que empezó todo." 
+    },
+    { 
+      url: "URL_DE_TU_FOTO_2", 
+      texto: "Mi sonrisa favorita." 
+    },
+    { 
+      url: "URL_DE_TU_FOTO_3", 
+      texto: "Un momento que guardo en mi corazón." 
+    }
+    // Puedes copiar y pegar el bloque de arriba (con la coma) para agregar más fotos
+  ],
+
+  carta: [
+    "Hace un año empezamos este camino y quiero recordarte que cada día a tu lado ha sido especial.",
+    "Me gusta cómo me escuchas, cómo te ríes y cómo hasta lo más simple se vuelve un plan increíble si estás tú.",
+    "No sé qué viene mañana, pero sé lo que siento hoy: estoy muy feliz y tengo ganas de seguir llenando nuestros días juntos.",
+    "Gracias por ser como eres. Hice esta página porque quería decírtelo de una forma distinta en nuestro primer aniversario."
+  ],
+
+  rasca: [
+    "Me encanta cómo te ríes.",
+    "Contigo cualquier día normal se vuelve especial.",
+    "Eres a quien primero quiero contarle todo."
+  ],
+
+  corazones: [
+    "Tu mensaje de buenos días es mi parte favorita de la mañana.",
+    "Me tranquilizas como nadie.",
+    "Me gusta cómo me miras cuando crees que no me doy cuenta.",
+    "Contigo me atrevo a ser yo.",
+    "Cada día que pasa me gustas más.",
+    "Gracias por quedarte conmigo."
+  ],
+
+  memoria: {
+    "Risas": "Contigo me río hasta que me duele la panza.",
+    "Abrazos": "Tus abrazos son mi lugar favorito.",
+    "Besos": "Podría pasarme el día entero así.",
+    "Café": "Cualquier plan contigo, hasta uno de café, se siente perfecto.",
+    "Cine": "Aunque la película sea mala, yo la paso bien si estás a mi lado.",
+    "Siempre": "Ojalá este sentimiento dure muchísimo."
+  },
+
+  pregunta: "¿Sabes cuánto te quiero?",
+  respuestaSi: "Pues mucho más. Más que ayer, menos que mañana.",
+
+  final: [
+    "Quiero que sepas que lo que siento es real y cada día crece más.",
+    "Gracias por dejarme conocerte y por todo este tiempo juntos. Me haces muy feliz, Estrella, y quiero seguir cuidando esto que tenemos.",
+    "Te quiero muchísimo. ¡Feliz Aniversario!"
+  ]
+};
+/* ============================================================ */
+
+const $ = (s, r = document) => r.querySelector(s);
+const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const addLi = (ul, text) => { const li = document.createElement('li'); li.textContent = text; ul.append(li); };
+
+/* ---------- Portada y carta ---------- */
+$('#nombre').textContent = CONFIG.nombre;
+$('#firma').textContent = 'Con todo mi cariño, ' + CONFIG.firma;
+CONFIG.carta.forEach(t => { const p = document.createElement('p'); p.textContent = t; $('#carta').append(p); });
+
+const start = new Date(CONFIG.inicio);
+if (!isNaN(start)) {
+  $('#since').textContent = 'desde el ' + start.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+  const tick = () => {
+    const s = Math.max(0, Math.floor((Date.now() - start.getTime()) / 1000));
+    $('#cD').textContent = Math.floor(s / 86400);
+    $('#cH').textContent = Math.floor((s % 86400) / 3600);
+    $('#cM').textContent = Math.floor((s % 3600) / 60);
+    $('#cS').textContent = s % 60;
+  };
+  tick(); setInterval(tick, 1000);
+}
+
+/* ---------- Galería Dinámica ---------- */
+const galleryGrid = $('#galleryGrid');
+if (CONFIG.galeria && CONFIG.galeria.length > 0) {
+  CONFIG.galeria.forEach(item => {
+    const card = document.createElement('div'); card.className = 'photo-card';
+    const img = document.createElement('img'); img.src = item.url; img.alt = item.texto;
+    const p = document.createElement('p'); p.textContent = item.texto;
+    card.append(img, p); galleryGrid.append(card);
+  });
+}
+
+/* ---------- Progreso ---------- */
+const TOTAL = 4;
+const done = new Set();
+function complete(key) {
+  if (done.has(key)) return;
+  done.add(key);
+  $('[data-stamp="' + key + '"]').classList.add('on');
+  updateFinal();
+}
+function updateFinal() {
+  const left = TOTAL - done.size, btn = $('#openFinal'), st = $('#finalStatus');
+  if (left > 0) {
+    st.textContent = left === 1 ? 'Falta 1 juego para abrir este mensaje.' : 'Faltan ' + left + ' juegos para abrir este mensaje.';
+    btn.disabled = true;
+  } else {
+    st.textContent = 'Lo lograste. Ya puedes abrirlo.';
+    btn.disabled = false;
+  }
+}
+updateFinal();
+
+/* ---------- Juego 1: rascar ---------- */
+(function () {
+  const grid = $('#scratchGrid');
+  let revealed = 0;
+  CONFIG.rasca.forEach(msg => {
+    const card = document.createElement('div'); card.className = 'scratch';
+    const p = document.createElement('p'); p.textContent = msg;
+    const cv = document.createElement('canvas'); cv.setAttribute('aria-label', 'Rasca para descubrir el mensaje');
+    card.append(p, cv); grid.append(card);
+
+    const w = card.clientWidth, h = card.clientHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = w * dpr; cv.height = h * dpr;
+    const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+    const g = ctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, cssVar('--accent')); g.addColorStop(1, cssVar('--accent-2'));
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = cssVar('--on-accent'); ctx.globalAlpha = 0.9;
+    ctx.font = '700 15px ' + cssVar('--font-body'); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('Rasca aquí', w / 2, h / 2); ctx.globalAlpha = 1;
+
+    let drawing = false, last = null, finished = false;
+    const pos = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    const scratch = e => {
+      const pt = pos(e);
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = 38; ctx.lineCap = 'round'; ctx.beginPath();
+      ctx.moveTo((last || pt).x, (last || pt).y); ctx.lineTo(pt.x, pt.y); ctx.stroke();
+      last = pt;
+    };
+    const check = () => {
+      if (finished) return;
+      const d = ctx.getImageData(0, 0, cv.width, cv.height).data;
+      let tot = 0, clr = 0;
+      for (let i = 3; i < d.length; i += 160) { tot++; if (d[i] < 128) clr++; }
+      if (clr / tot > 0.45) {
+        finished = true; cv.classList.add('gone'); revealed++;
+        if (revealed === CONFIG.rasca.length) complete('rasca');
+      }
+    };
+    cv.addEventListener('pointerdown', e => { drawing = true; last = null; cv.setPointerCapture(e.pointerId); scratch(e); });
+    cv.addEventListener('pointermove', e => { if (drawing) scratch(e); });
+    const end = () => { if (!drawing) return; drawing = false; last = null; check(); };
+    cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  });
+})();
+
+/* ---------- Juego 2: corazones ---------- */
+(function () {
+  const arena = $('#arena'), btn = $('#heartStart'), status = $('#heartStatus'), list = $('#heartMsgs');
+  const N = CONFIG.corazones.length;
+  let caught = 0, timer = null;
+  status.textContent = '0 de ' + N + ' corazones';
+
+  function spawn() {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'heart';
+    b.setAttribute('aria-label', 'Atrapar corazón');
+    const size = 36 + Math.random() * 18;
+    b.style.width = b.style.height = size + 'px';
+    b.style.left = Math.max(0, Math.random() * (arena.clientWidth - size)) + 'px';
+    b.style.animationDuration = (3.4 + Math.random() * 2.2) + 's';
+    b.innerHTML = '<span style="display:block;width:100%;height:100%">' + HEART + '</span>';
+    b.addEventListener('animationend', e => { if (e.target === b) b.remove(); });
+    b.addEventListener('click', () => {
+      if (b.disabled) return;
+      b.disabled = true; b.style.animationPlayState = 'paused';
+      b.firstElementChild.classList.add('pop');
+      setTimeout(() => b.remove(), 260);
+      caught++;
+      addLi(list, CONFIG.corazones[caught - 1]);
+      status.textContent = caught + ' de ' + N + ' corazones';
+      if (caught >= N) {
+        clearInterval(timer); status.textContent = 'Los atrapaste todos.';
+        complete('corazones');
+      }
+    });
+    arena.append(b);
+  }
+  btn.addEventListener('click', () => {
+    btn.disabled = true; btn.textContent = 'Jugando';
+    spawn(); timer = setInterval(spawn, 850);
+  });
+})();
+
+/* ---------- Juego 3: memoria ---------- */
+(function () {
+  const grid = $('#memGrid'), list = $('#memMsgs');
+  const words = Object.keys(CONFIG.memoria);
+  let first = null, lock = false, matched = 0;
+  shuffle(words.concat(words)).forEach(word => {
+    const c = document.createElement('button'); c.type = 'button'; c.className = 'card'; c.dataset.word = word;
+    c.setAttribute('aria-label', 'Tarjeta oculta');
+    c.innerHTML = '<span class="back">?</span><span class="face"></span>';
+    c.querySelector('.face').textContent = word;
+    c.addEventListener('click', () => {
+      if (lock || c.classList.contains('open') || c.classList.contains('matched')) return;
+      c.classList.add('open'); c.setAttribute('aria-label', word);
+      if (!first) { first = c; return; }
+      if (first.dataset.word === word) {
+        first.classList.replace('open', 'matched'); c.classList.replace('open', 'matched');
+        addLi(list, word + ': ' + CONFIG.memoria[word]);
+        first = null; matched++;
+        if (matched === words.length) complete('memoria');
+      } else {
+        lock = true; const a = first; first = null;
+        setTimeout(() => {
+          [a, c].forEach(x => { x.classList.remove('open'); x.setAttribute('aria-label', 'Tarjeta oculta'); });
+          lock = false;
+        }, 800);
+      }
+    });
+    grid.append(c);
+  });
+})();
+
+/* ---------- Juego 4: la pregunta ---------- */
+(function () {
+  const area = $('#dodge'), yes = $('#yes'), no = $('#no'), st = $('#dodgeStatus'), out = $('#dodgeMsg');
+  $('#dq').textContent = CONFIG.pregunta;
+  const taunts = ['Ups, se escapó.', 'Casi lo atrapas.', 'Ese botón no coopera.', 'Mejor di que sí.', 'Qué terco el botón.'];
+  let tries = 0;
+  function move() {
+    const a = area.getBoundingClientRect(), b = no.getBoundingClientRect(), y = yes.getBoundingClientRect();
+    let x = 0, t = 0;
+    for (let i = 0; i < 25; i++) {
+      x = Math.random() * (a.width - b.width); t = 40 + Math.random() * (a.height - b.height - 40);
+      const ox = x < y.right - a.left + 10 && x + b.width > y.left - a.left - 10;
+      const oy = t < y.bottom - a.top + 10 && t + b.height > y.top - a.top - 10;
+      if (!(ox && oy)) break;
+    }
+    no.style.right = 'auto'; no.style.bottom = 'auto';
+    no.style.left = x + 'px'; no.style.top = t + 'px';
+    st.textContent = taunts[tries % taunts.length]; tries++;
+  }
+  ['pointerenter', 'pointerdown', 'focus'].forEach(ev => no.addEventListener(ev, e => { if (ev === 'pointerdown') e.preventDefault(); move(); }));
+  no.addEventListener('click', e => { e.preventDefault(); move(); });
+  yes.addEventListener('click', () => {
+    no.hidden = true; yes.disabled = true; st.textContent = '';
+    out.textContent = CONFIG.respuestaSi; out.hidden = false;
+    complete('pregunta');
+  });
+})();
+
+/* ---------- Mensaje final ---------- */
+$('#openFinal').addEventListener('click', () => {
+  const box = $('#finalMsg');
+  CONFIG.final.forEach((t, i) => { const p = document.createElement('p'); if (i === 0) p.className = 'big'; p.textContent = t; box.append(p); });
+  box.hidden = false; $('#openFinal').hidden = true; $('#finalStatus').hidden = true;
+  const sec = $('#final');
+  for (let i = 0; i < 18; i++) {
+    const c = document.createElement('span'); c.className = 'confetti'; c.innerHTML = HEART;
+    c.style.left = (Math.random() * 94) + '%'; c.style.animationDelay = (Math.random() * 0.8) + 's';
+    sec.append(c); setTimeout(() => c.remove(), 3200);
+  }
+});
+</script>
+
+</body></html>
