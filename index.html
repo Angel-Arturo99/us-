@@ -3,7 +3,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@400;500;700&family=Young+Serif&display=swap">
 <style>
-/* Layout: columna única íntima. Portada con contador en vivo, carta, galería, cuatro juegos que sellan un pasaporte, y un mensaje final. */
+/* Layout principal */
 :root {
   --bg: #F6EFF7;
   --bg-soft: #EBDFF0;
@@ -51,7 +51,7 @@ p { margin: 0; }
 button { font: inherit; color: inherit; cursor: pointer; }
 :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
 
-/* Portada */
+/* Portada y Contador */
 .hero { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
 .hero h1 { font-size: clamp(2.8rem, 12vw, 5.2rem); }
 .hero h1 span { color: var(--accent); }
@@ -138,6 +138,30 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   .found li, .card, .dodge .no, .scratch canvas { animation: none; transition: none; }
 }
+
+/* EVENTO DE ANIVERSARIO */
+.event-card { background: var(--surface); border: 2px solid var(--accent); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-align: center; box-shadow: 0 8px 24px rgba(214, 51, 108, 0.15); }
+.event-locked { background: var(--bg-soft); border: 1.5px dashed var(--line); border-radius: 14px; padding: 20px; text-align: center; color: var(--muted); }
+.cal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
+.cal-item { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px; padding: 12px 8px; cursor: pointer; transition: transform 0.2s, background 0.2s; }
+.cal-item:hover { transform: translateY(-2px); border-color: var(--accent); }
+.cal-item.open { background: var(--accent); color: var(--on-accent); }
+.cal-item b { display: block; font-size: 0.9rem; }
+.cal-item span { font-size: 0.75rem; opacity: 0.9; }
+
+/* 100 Cosas y Espectáculo 3D */
+.cien-cosas-box { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 12px; padding: 16px; max-height: 220px; overflow-y: auto; text-align: left; margin-top: 16px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
+.cien-cosas-box p { font-family: var(--font-hand); font-size: 1.35rem; color: var(--fg); border-bottom: 1px dashed var(--line); padding: 6px 0; margin: 0; }
+.cien-cosas-box p:last-child { border-bottom: none; }
+
+.espectaculo-overlay { position: fixed; inset: 0; background: #0a0510; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.8s ease; }
+.espectaculo-overlay.activo { opacity: 1; pointer-events: all; }
+#fwCanvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.escena-3d { perspective: 1000px; z-index: 10; margin-bottom: 40px; }
+.corazon-3d { width: 140px; height: 140px; color: #ff1e56; transform-style: preserve-3d; animation: girar3D 4s linear infinite, latir3D 1s ease-in-out infinite alternate; }
+.corazon-3d svg { width: 100%; height: 100%; fill: currentColor; filter: drop-shadow(0 0 25px currentColor); }
+@keyframes girar3D { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+@keyframes latir3D { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
 </style>
 
 <main class="wrap">
@@ -153,6 +177,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
     </div>
   </header>
 
+  <!-- EVENTO ESPECIAL -->
+  <section id="seccionEvento"></section>
+
   <section class="letter" aria-labelledby="t-carta">
     <p class="eyebrow">Lo que quiero decirte</p>
     <h2 id="t-carta">Lo que siento por ti</h2>
@@ -160,7 +187,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     <p class="sign" id="firma"></p>
   </section>
 
-  <!-- NUEVA SECCIÓN DE GALERÍA -->
+  <!-- GALERÍA -->
   <section class="gallery" aria-labelledby="t-galeria">
     <p class="eyebrow">Nuestro Primer Año</p>
     <h2 id="t-galeria">Galería de Recuerdos</h2>
@@ -226,26 +253,65 @@ button { font: inherit; color: inherit; cursor: pointer; }
   </section>
 </main>
 
+<!-- PANTALLA OCULTA DEL ESPECTÁCULO 3D -->
+<div id="pantallaEspectaculo" class="espectaculo-overlay">
+  <canvas id="fwCanvas"></canvas>
+  <div class="escena-3d">
+    <div class="corazon-3d">
+      <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    </div>
+  </div>
+  <h2 style="color: #fff; font-family: var(--font-display); z-index: 10; text-align: center; font-size: 2rem;">Te amo, Estrella</h2>
+  <button class="btn ghost" onclick="cerrarEspectaculo()" style="border-color: #fff; color: #fff; z-index: 10; margin-top: 30px;">Volver</button>
+</div>
+
 <script>
-/* Hola miamor Sabias que te amo mucho*/
 const CONFIG = {
   nombre: "Estrella",                   
   firma: "Arturo",                  
-  inicio: "2025-11-08T00:00:00",        
+  inicio: "2025-11-08T00:00:00", 
+
+  // CLAVE MAESTRA
+  secretBypassKey: "0x8NOV2025_ESTRELLA_KEY",
+
+  eventoAniversario: {
+    desbloqueoManual: false,
+    titulo: "🎉 ¡FELIZ PRIMER ANIVERSARIO! 🎉",
+    mensaje: "12 meses, 365 días y miles de momentos a tu lado. Haz clic en cada mes para revivir nuestro camino Te Amoooo:",
+    
+    // AGREGA AQUÍ EL RESTO DE LAS 100 COSAS
+    cienCosas: [
+      "1. Tu sonrisa cuando me ves llegar.",
+      "2. Cómo me escuchas cuando te hablo de mis cosas.",
+      "3. La forma en que me abrazas fuerte.",
+      "4. Tus ojos detrás de tus lentes.",
+      "5. Cómo disfrutas el arte y las exposiciones.",
+      "6. Nuestras citas elegantes y noches especiales.",
+      "7. La paz que me das cuando más lo necesito.",
+      "8. Tus mensajes de buenos días.",
+      "9. Que me dejas ser yo mismo contigo.",
+      "10. Saber que este es solo nuestro primer año de muchos más."
+    ],
+    meses: [
+      { mes: "Nov 2025", nota: "El comienzo de nuestra historia y nuestro primer beso." },
+      { mes: "Dic 2025", nota: "Nuestra primera Navidad y cierres de año juntos." },
+      { mes: "Ene 2026", nota: "Empezar el año a tu lado fue el mejor regalo." },
+      { mes: "Feb 2026", nota: "San Valentín y tantas risas compartidas." },
+      { mes: "Mar 2026", nota: "Cosas simples que juntos se volvieron memorables." },
+      { mes: "Abr 2026", nota: "Nuestras fotos elegantes en el espejo." },
+      { mes: "May 2026", nota: "Cada día conociéndonos y queriéndonos más." },
+      { mes: "Jun 2026", nota: "Nuestras pláticas interminables y tardes de café." },
+      { mes: "Jul 2026", nota: "Apoyándonos en todo momento." },
+      { mes: "Ago 2026", nota: "Contando los días para nuestro aniversario." },
+      { mes: "Sep 2026", nota: "Nuestra cita en el museo de Van Gogh." },
+      { mes: "Oct / Nov 2026", nota: "¡Un año completo de ser oficialmente el uno para el otro!" }
+    ]
+  },
 
   galeria: [
-    { 
-      url: "foto1.jpg", 
-      texto: "Tenerte asi de cerquita siempre será mi lugar favorito." 
-    },
-    { 
-      url: "foto2.jpg", 
-      texto: "Nuestras noches especiales arreglados y disfrutando juntos." 
-    },
-    { 
-      url: "foto3.jpg", 
-      texto: "Tú admirando el arte... y yo admirándote a ti." 
-    }
+    { url: "foto1.jpg", texto: "Tenerte asi de cerquita siempre será mi lugar favorito." },
+    { url: "foto2.jpg", texto: "Nuestras noches especiales arreglados y disfrutando juntos." },
+    { url: "foto3.jpg", texto: "Tú admirando el arte... y yo admirándote a ti." }
   ],
 
   carta: [
@@ -288,7 +354,6 @@ const CONFIG = {
     "Te quiero muchísimo. ¡Feliz Aniversario!"
   ]
 };
-/* ============================================================ */
 
 const $ = (s, r = document) => r.querySelector(s);
 const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
@@ -296,7 +361,7 @@ const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const addLi = (ul, text) => { const li = document.createElement('li'); li.textContent = text; ul.append(li); };
 
-/* ---------- Portada y carta ---------- */
+/* Portada y carta */
 $('#nombre').textContent = CONFIG.nombre;
 $('#firma').textContent = 'Con todo mi cariño, ' + CONFIG.firma;
 CONFIG.carta.forEach(t => { const p = document.createElement('p'); p.textContent = t; $('#carta').append(p); });
@@ -314,7 +379,7 @@ if (!isNaN(start)) {
   tick(); setInterval(tick, 1000);
 }
 
-/* ---------- Galería Dinámica ---------- */
+/* Galería */
 const galleryGrid = $('#galleryGrid');
 if (CONFIG.galeria && CONFIG.galeria.length > 0) {
   CONFIG.galeria.forEach(item => {
@@ -325,7 +390,7 @@ if (CONFIG.galeria && CONFIG.galeria.length > 0) {
   });
 }
 
-/* ---------- Progreso ---------- */
+/* Progreso Juegos */
 const TOTAL = 4;
 const done = new Set();
 function complete(key) {
@@ -346,7 +411,7 @@ function updateFinal() {
 }
 updateFinal();
 
-/* ---------- Juego 1: rascar ---------- */
+/* Rasca */
 (function () {
   const grid = $('#scratchGrid');
   let revealed = 0;
@@ -392,7 +457,7 @@ updateFinal();
   });
 })();
 
-/* ---------- Juego 2: corazones ---------- */
+/* Corazones */
 (function () {
   const arena = $('#arena'), btn = $('#heartStart'), status = $('#heartStatus'), list = $('#heartMsgs');
   const N = CONFIG.corazones.length;
@@ -429,7 +494,7 @@ updateFinal();
   });
 })();
 
-/* ---------- Juego 3: memoria ---------- */
+/* Memoria */
 (function () {
   const grid = $('#memGrid'), list = $('#memMsgs');
   const words = Object.keys(CONFIG.memoria);
@@ -460,7 +525,7 @@ updateFinal();
   });
 })();
 
-/* ---------- Juego 4: la pregunta ---------- */
+/* Pregunta */
 (function () {
   const area = $('#dodge'), yes = $('#yes'), no = $('#no'), st = $('#dodgeStatus'), out = $('#dodgeMsg');
   $('#dq').textContent = CONFIG.pregunta;
@@ -488,7 +553,7 @@ updateFinal();
   });
 })();
 
-/* ---------- Mensaje final ---------- */
+/* Mensaje final */
 $('#openFinal').addEventListener('click', () => {
   const box = $('#finalMsg');
   CONFIG.final.forEach((t, i) => { const p = document.createElement('p'); if (i === 0) p.className = 'big'; p.textContent = t; box.append(p); });
@@ -500,4 +565,180 @@ $('#openFinal').addEventListener('click', () => {
     sec.append(c); setTimeout(() => c.remove(), 3200);
   }
 });
+
+/* --- LÓGICA DEL EVENTO DE ANIVERSARIO --- */
+let esElDiaGlobal = false;
+
+async function verificarFechaEvento() {
+  const TIMESTAMP_OBJETIVO = 1794117600 * 1000; 
+  let tiempoActualMs = Date.now();
+
+  try {
+    const res = await fetch('https://worldtimeapi.org/api/timezone/America/Mexico_City');
+    if (res.ok) {
+      const data = await res.json();
+      tiempoActualMs = new Date(data.datetime).getTime();
+    }
+  } catch (e) {
+    console.log("Servidor no disponible, usando reloj local.");
+  }
+
+  return (tiempoActualMs >= TIMESTAMP_OBJETIVO) || CONFIG.eventoAniversario.desbloqueoManual;
+}
+
+function revelarMes(elem, nota) {
+  document.querySelectorAll('.cal-item').forEach(el => el.classList.remove('open'));
+  elem.classList.add('open');
+  $('#mesNota').textContent = nota;
+}
+
+function renderizarEvento(forzarDesbloqueo = false) {
+  const contenedor = $('#seccionEvento');
+  if (!contenedor || !CONFIG.eventoAniversario) return;
+
+  if (esElDiaGlobal || forzarDesbloqueo) {
+    let htmlMeses = CONFIG.eventoAniversario.meses.map((m, idx) => `
+      <div class="cal-item" onclick="revelarMes(this, '${m.nota}')">
+        <b>Mes ${idx + 1}</b>
+        <span>${m.mes}</span>
+      </div>
+    `).join('');
+
+    let htmlCienCosas = CONFIG.eventoAniversario.cienCosas.map(cosa => `<p>${cosa}</p>`).join('');
+
+    contenedor.innerHTML = `
+      <div class="event-card">
+        <p class="eyebrow">Evento Especial</p>
+        <h2>${CONFIG.eventoAniversario.titulo}</h2>
+        <p>${CONFIG.eventoAniversario.mensaje}</p>
+        <div class="cal-grid">${htmlMeses}</div>
+        <p id="mesNota" style="font-family: var(--font-hand); font-size: 1.5rem; color: var(--accent); min-height: 2em; margin-top: 10px;"></p>
+        
+        <hr style="border: 0; border-top: 1.5px dashed var(--line); margin: 10px 0; width: 100%;">
+        
+        <h3 style="margin-top: 10px;">100 Cosas que amo de ti</h3>
+        <div class="cien-cosas-box">
+          ${htmlCienCosas}
+        </div>
+
+        <button class="btn" type="button" onclick="abrirEspectaculo()" style="margin: 24px auto 0; font-size: 1.1rem; padding: 12px 28px;">
+          🎆 Iniciar Espectáculo 3D 🎆
+        </button>
+      </div>
+    `;
+  } else {
+    contenedor.innerHTML = `
+      <div class="event-locked">
+        <p class="eyebrow">Sorpresa de Aniversario</p>
+        <h3>🔒 Evento Secreto del 8 de Noviembre</h3>
+        <p>Este espacio se activará automáticamente cuando llegue la fecha exacta.</p>
+        
+        <div style="margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+          <input type="text" id="fakeCodeInput" placeholder="Ingresa clave de código fuente..." style="padding: 10px 16px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); font-family: monospace; text-align: center; width: 85%; max-width: 280px; outline: none; font-size: 0.85rem;">
+          <button class="btn" type="button" onclick="probarCodigoFake()" style="font-size: 0.85rem; padding: 8px 18px;">Verificar Clave</button>
+        </div>
+        
+        <p id="fakeCodeMsg" style="font-family: var(--font-hand); font-size: 1.4rem; color: var(--accent); margin-top: 14px; min-height: 2em; line-height: 1.2; padding: 0 10px;"></p>
+      </div>
+    `;
+  }
+}
+
+const RESPUESTAS_BROMA = [
+  "🚨 ALERTA DE HACKEO 🚨 ¿En serio creíste que el futuro Ingeniero en Ciberseguridad dejaría una puerta trasera tan fácil? 😎",
+  "❌ Clave rechazada. El único bypass oficial se activa dándome un abrazo el 8 de noviembre 🙈",
+  "Procesando... 🔄 Error 404: Paciencia no encontrada 😜 ¡Ya casi llega el día!",
+  "Acceso denegado 🔐 Sistema protegido con la clave de seguridad anti-ansiedad de Arturo 💖",
+  "Intento registrado 📝 Tu castigo por querer adelantarte es darle un beso a tu novio cuando lo veas 😘",
+  "Casi... ¡pero no! Te amo mucho, pero vas a tener que aguantar la curiosidad hasta el mero día ✨"
+];
+
+let iBroma = 0;
+function probarCodigoFake() {
+  const input = document.getElementById('fakeCodeInput');
+  const msg = document.getElementById('fakeCodeMsg');
+  if (!input || !msg) return;
+
+  const valor = input.value.trim();
+
+  if (valor === CONFIG.secretBypassKey) {
+    msg.style.color = "var(--accent)";
+    msg.textContent = "🔓 ¡Clave de desarrollador aceptada! Desbloqueando sorpresas...";
+    setTimeout(() => { renderizarEvento(true); }, 1000);
+    return;
+  }
+
+  msg.textContent = RESPUESTAS_BROMA[iBroma % RESPUESTAS_BROMA.length];
+  iBroma++;
+  input.value = '';
+}
+
+(async function() {
+  esElDiaGlobal = await verificarFechaEvento();
+  renderizarEvento();
+})();
+
+/* Fuegos Artificiales 3D */
+let animacionFW;
+let particulas = [];
+const fwCanvas = document.getElementById('fwCanvas');
+const fwCtx = fwCanvas ? fwCanvas.getContext('2d') : null;
+
+function abrirEspectaculo() {
+  document.getElementById('pantallaEspectaculo').classList.add('activo');
+  if(fwCanvas) {
+    fwCanvas.width = window.innerWidth;
+    fwCanvas.height = window.innerHeight;
+    crearFuegos();
+    bucleFuegos();
+  }
+}
+
+function cerrarEspectaculo() {
+  document.getElementById('pantallaEspectaculo').classList.remove('activo');
+  cancelAnimationFrame(animacionFW);
+  particulas = [];
+}
+
+function crearParticula(x, y) {
+  return {
+    x: x || Math.random() * fwCanvas.width,
+    y: y || Math.random() * fwCanvas.height,
+    vx: (Math.random() - 0.5) * 8,
+    vy: (Math.random() - 0.5) * 8 - 2,
+    vida: Math.random() * 0.8 + 0.2,
+    color: `hsl(${Math.random() * 360}, 100%, 65%)`
+  };
+}
+
+function crearFuegos() {
+  for (let i = 0; i < 150; i++) {
+    particulas.push(crearParticula(fwCanvas.width / 2, fwCanvas.height / 2));
+  }
+}
+
+function bucleFuegos() {
+  fwCtx.fillStyle = 'rgba(10, 5, 16, 0.2)';
+  fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+  
+  particulas.forEach((p, index) => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.05; 
+    p.vida -= 0.01;
+    
+    fwCtx.fillStyle = p.color;
+    fwCtx.beginPath();
+    fwCtx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    fwCtx.fill();
+    
+    if (p.vida <= 0) {
+      particulas[index] = crearParticula(Math.random() * fwCanvas.width, Math.random() * (fwCanvas.height / 1.5));
+    }
+  });
+  
+  animacionFW = requestAnimationFrame(bucleFuegos);
+}
 </script>
+
+</body></html>
